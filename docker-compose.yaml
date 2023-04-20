@@ -15,9 +15,6 @@ services:
   ports:
    - 80:80
    - 443:443
-  dns:
-    1.1.1.1
-    1.0.0.1
   volumes:
    - ./traefik.yaml:/traefik.yaml:ro
    - ./data/acme.json:/acme.json:rw # touch amce.json && sudo chmod 600 acme.json

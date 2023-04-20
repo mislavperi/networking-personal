@@ -1,6 +1,9 @@
 tls:
   options:
     default:
+      dns:
+        1.1.1.1
+        1.0.0.1
       minVersion: VersionTLS12
       maxVersion: VersionTLS13
       sniStrict: true
