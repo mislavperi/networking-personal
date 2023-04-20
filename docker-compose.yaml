@@ -1,25 +1,37 @@
 version: "3.8"
+secrets:
+  cf_api_email: # make a file with no extenstion and place the contents of it in said file in said location
+   file: ./secrets/cf_api_email
+  cf_api_token: # make a file with no extenstion and place the contents of it in said file in said location
+   file: ./secrets/cloudflare_api_token 
+
 services:
-    traefik:
-        image: traefik:2.9.10
-        container_name: traefik
-        restart: unless-stopped
-        env_file:
-          - ./conf.env
-        networks:
-            - traefik
-        ports:
-            - 80:80
-            - 443:443
-        volumes:
-            - ./traefik.yaml:/etc/traefik/traefik.yaml:ro
-            - ./data/letsencrypt/:/letsencrypt
-            - ./configs/:/configs/:ro
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-        labels:
-            traefik.enable: true
-            traefik.http.routers.dashboard.rule: Host(`traefik.boket78.com`)
-            traefik.http.routers.dashboard.entrypoints: https
-            traefik.http.routers.dashboard.service: api@internal
-networks:
+ traefik:
+  image: traefik:2.9.10
+  container_name: traefik
+  restart: unless-stopped
+  networks:
+   - traefik
+  ports:
+   - 80:80
+   - 443:443
+  volumes:
+   - ./traefik.yaml:/traefik.yaml:ro
+   - ./data/acme.json:/acme.json:rw # touch amce.json && sudo chmod 600 acme.json
+   - ./configs:/configs:ro
+   - /var/run/docker.sock:/var/run/docker.sock:ro
+  environment:
+   - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_api_token
+   - CF_API_EMAIL_FILE=/run/secrets/cf_api_email
+  labels:
+   - traefik.enable=true
+   - traefik.http.routers.dashboard.entrypoints=https
+   - traefik.http.routers.dashboard.rule=Host(`traefik.boket78.com`)
+   - traefik.http.routers.dashboard.service=api@internal
+   - traefik.http.routers.dashboard.tls=true
+   - traefik.http.routers.dashboard.tls.certresolver=dns
+   - traefik.http.routers.dashboard.tls.domains[0].main=boket78.com
+   - traefik.http.routers.dashboard.tls.domains[0].sans=*.boket78.com
+
+networks: # I'd recommend creating a dedicated docker network via docker network create <name> honestly..
   traefik:
