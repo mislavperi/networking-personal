@@ -1,8 +1,8 @@
 version: "3.8"
 secrets:
-  cf_api_email: # make a file with no extenstion and place the contents of it in said file in said location
+  cf_api_email:
    file: ./secrets/cf_api_email
-  cf_api_token: # make a file with no extenstion and place the contents of it in said file in said location
+  cf_api_token:
    file: ./secrets/cloudflare_api_token 
 
 services:
@@ -21,8 +21,8 @@ services:
    - ./configs:/configs:ro
    - /var/run/docker.sock:/var/run/docker.sock:ro
   environment:
-   - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_api_token
-   - CF_API_EMAIL_FILE=/run/secrets/cf_api_email
+   - CLOUDFLARE_DNS_API_TOKEN=/run/secrets/cf_api_token
+   - CLOUDFLARE_EMAIL=/run/secrets/cf_api_email
   labels:
    - traefik.enable=true
    - traefik.http.routers.dashboard.entrypoints=https
