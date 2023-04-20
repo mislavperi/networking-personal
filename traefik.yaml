@@ -1,0 +1,45 @@
+entryPoints:
+    http:
+        address: ':80'
+        proxyProtocol:
+            insecure: true # not directly exposed
+        http:
+            redirections:
+                entryPoint:
+                    to: https
+                    permanent: true
+    https:
+        address: ':443'
+        proxyProtocol:
+            insecure: true # not directly exposed
+        http:
+            tls:
+                certResolver: cloudflare
+                domains:
+                    - main: boket78.com
+                      sans:
+                          - '*.boket78.com'
+providers:
+    docker:
+        exposedByDefault: false
+        swarmMode: false
+        network: traefik
+    file:
+        directory: '/configs'
+        watch: true
+
+api:
+    dashboard: true
+    insecure: true
+
+certificatesResolvers:
+    cloudflare:
+        acme:
+            email: mislavperic32@gmail.com
+            storage: /letsencrypt/acme.json
+            dnsChallenge: 
+                provider: cloudflare
+                delayBeforeCheck: "120"
+                resolvers:
+                    - opal.ns.cloudflare.com
+                    - trace.ns.cloudflare.com
