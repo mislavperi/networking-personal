@@ -1,13 +1,10 @@
 version: "3.8"
-secrets:
-  porkbun_secret_token:
-   file: ./secrets/porkbun_secret_token
-  porkbun_token:
-   file: ./secrets/porkbun_token 
 
 services:
  traefik:
   image: traefik:2.9.10
+  env_file:
+   - ./conf.env
   container_name: traefik
   restart: unless-stopped
   networks:
@@ -28,9 +25,6 @@ services:
    - traefik.http.routers.dashboard.entrypoints=https
    - traefik.http.routers.dashboard.rule=Host(`traefik.boket78.com`)
    - traefik.http.routers.dashboard.service=api@internal
-   - traefik.http.routers.dashboard.tls=true
    - traefik.http.routers.dashboard.tls.certresolver=dns
-   - traefik.http.routers.dashboard.tls.domains[0].main=boket78.com
-   - traefik.http.routers.dashboard.tls.domains[0].sans=*.boket78.com
 networks: # I'd recommend creating a dedicated docker network via docker network create <name> honestly..
   traefik:
