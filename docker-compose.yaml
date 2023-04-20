@@ -1,9 +1,9 @@
 version: "3.8"
 secrets:
-  cf_api_email:
-   file: ./secrets/cf_api_email
-  cf_api_token:
-   file: ./secrets/cloudflare_api_token 
+  porkbun_secret_token:
+   file: ./secrets/porkbun_secret_token
+  porkbun_token:
+   file: ./secrets/porkbun_token 
 
 services:
  traefik:
@@ -21,8 +21,8 @@ services:
    - ./configs:/configs:ro
    - /var/run/docker.sock:/var/run/docker.sock:ro
   environment:
-   - CLOUDFLARE_DNS_API_TOKEN=/run/secrets/cf_api_token
-   - CLOUDFLARE_EMAIL=/run/secrets/cf_api_email
+   - PORKBUN_SECRET_API_KEY=/run/secrets/porkbun_secret_token
+   - PORKBUN_API_KEY=/run/secrets/porkbun_token
   labels:
    - traefik.enable=true
    - traefik.http.routers.dashboard.entrypoints=https
