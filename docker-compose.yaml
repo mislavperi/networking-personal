@@ -7,6 +7,9 @@ services:
    - ./conf.env
   container_name: traefik
   restart: unless-stopped
+  environment:
+    - PORKBUN_SECRET_API_KEY=$PORKBUN_API_KEY
+    - PORKBUN_API_KEY=$PORKBUN_SECRET_API_KEY
   networks:
    - traefik
   ports:
