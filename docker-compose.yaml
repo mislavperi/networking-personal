@@ -6,6 +6,8 @@ services:
         image: traefik:latest
         container_name: traefik
         restart: unless-stopped
+        env_file:
+          - ./conf.env
         networks:
             - traefik
         ports:
