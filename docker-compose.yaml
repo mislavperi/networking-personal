@@ -58,8 +58,8 @@ services:
             - traefik
         labels:
             traefik.enable: true
-            traefik.http.routers.homepage.rule: Host(`boket78.com`)
-            traefik.http.routers.homepage.entrypoints: https
+            traefik.http.routers.client.rule: Host(`boket78.com`)
+            traefik.http.routers.client.entrypoints: https
 networks:
     traefik:
         name: traefik
