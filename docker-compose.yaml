@@ -25,28 +25,44 @@ services:
             - traefik.http.routers.dashboard.entrypoints=https
             - traefik.http.routers.dashboard.rule=Host(`traefik.boket78.com`)
             - traefik.http.routers.dashboard.service=api@internal
-            - traefik.http.routers.dashboard.middlewares=authelia@docker
+            # - traefik.http.routers.dashboard.middlewares=authelia@docker
             - traefik.http.routers.dashboard.tls.certresolver=dns
-    authelia:
-        image: authelia/authelia
-        container_name: authelia
-        restart: unless-stopped
+    # authelia:
+    #     image: authelia/authelia
+    #     container_name: authelia
+    #     restart: unless-stopped
+    #     networks:
+    #         - traefik
+    #     volumes:
+    #         - ./data/authelia/:/config/
+    #     environment:
+    #         - TZ=Europe/Berlin
+    #     expose:
+    #         - 9091
+    #     labels:
+    #         traefik.enable: true
+    #         traefik.http.routers.authelia.rule: Host(`auth.boket78.com`)
+    #         traefik.http.routers.authelia.entrypoints: https
+    #         traefik.http.services.authelia.loadbalancer.server.port: 9091
+    #         traefik.http.middlewares.authelia.forwardauth.address: http://authelia:9091/api/verify?rd=https://auth.boket78.com
+    #         traefik.http.middlewares.authelia.forwardauth.trustForwardHeader: true
+    #         traefik.http.middlewares.authelia.forwardauth.authResponseHeaders: Remote-User,Remote-Groups,Remote-Name,Remote-Email
+    client:
+        container_name: client
+        build:
+            context: ../b78
+            dockerfile: Dockerfile
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - /:/host:ro,rslave
+        expose:
+            - 3000
         networks:
             - traefik
-        volumes:
-            - ./data/authelia/:/config/
-        environment:
-            - TZ=Europe/Berlin
-        expose:
-            - 9091
         labels:
             traefik.enable: true
-            traefik.http.routers.authelia.rule: Host(`auth.boket78.com`)
-            traefik.http.routers.authelia.entrypoints: https
-            traefik.http.services.authelia.loadbalancer.server.port: 9091
-            traefik.http.middlewares.authelia.forwardauth.address: http://authelia:9091/api/verify?rd=https://auth.boket78.com
-            traefik.http.middlewares.authelia.forwardauth.trustForwardHeader: true
-            traefik.http.middlewares.authelia.forwardauth.authResponseHeaders: Remote-User,Remote-Groups,Remote-Name,Remote-Email
+            traefik.http.routers.homepage.rule: Host(`boket78.com`)
+            traefik.http.routers.homepage.entrypoints: https
 networks:
     traefik:
         name: traefik
