@@ -63,6 +63,8 @@ services:
             traefik.enable: true
             traefik.http.routers.client.rule: Host(`boket78.com`)
             traefik.http.routers.client.entrypoints: https
+            traefik.http.routers.client.tls.certresolver: dns
+
 networks:
     traefik:
         name: traefik
